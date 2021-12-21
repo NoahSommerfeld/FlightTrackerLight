@@ -1,7 +1,7 @@
 #include "Config.h"
 #include <NeoPixelBus.h>
 #include <NeoPixelAnimator.h>
-//#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 //#include <WiFi.h>
 #include <ESP_Mail_Client.h>
 
