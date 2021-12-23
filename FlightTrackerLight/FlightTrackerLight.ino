@@ -91,8 +91,8 @@ void setup() {
   config.search.criteria = "";
   config.search.unseen_msg = true; //search unread emails too
   config.storage.saved_path = "/email_data";
-  //config.storage.type = esp_mail_file_storage_type_none;
-  config.storage.type = esp_mail_file_storage_type_flash;
+  config.storage.type = esp_mail_file_storage_type_none;
+  //config.storage.type = esp_mail_file_storage_type_flash;
   config.download.header = true;
   config.download.text = false;
   config.download.html = false;
