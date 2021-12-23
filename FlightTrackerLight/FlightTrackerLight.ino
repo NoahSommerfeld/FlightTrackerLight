@@ -46,7 +46,7 @@ void setup() {
     strip.Begin();
     strip.Show();
     
-    boardPrinterSetup();
+    
 /*
 //set up wifi 
     Serial.print("Connecting to wifi");
@@ -121,7 +121,8 @@ void loop() {
       strip.SetPixelColor(10,RgbColor(0,0,0));
       strip.Show();
       delay (250);
-
+  boardPrinterSetup();
+  /*
   //Listen for mailbox changes
     if (!imap.listen())
         return;
@@ -130,7 +131,7 @@ void loop() {
     if (imap.folderChanged())
         printPollingStatus(imap);
 
-    //To stop listen, use imap.stopListen(); and to listen again, call imap.listen()
+    //To stop listen, use imap.stopListen(); and to listen again, call imap.listen()*/
 }
 
 
