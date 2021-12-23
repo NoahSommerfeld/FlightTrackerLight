@@ -43,7 +43,7 @@ const letterLEDmapping LEDAlphabet[] {
     {'5', 9, {34,33,32,26,20,21,16,9,8}},
     {'6', 12, {34,33,32,26,20,14,8,9,10,16,22,21}},
     {'7', 7, {32,33,34,28,22,16,10}},
-    {'8', 7, {34,33,32,26,20,21,22,28,14,8,9,10,16,22}},
+    {'8', 14, {34,33,32,26,20,21,22,28,14,8,9,10,16,22}},
     {'9', 10, {34,33,32,26,20,21,22,28,16,10}},
     {'0', 8, {33,26,20,14,9,16,22,28}},
     {'-', 3, {20,21,22}},
@@ -58,6 +58,15 @@ void wipeboard(){
 
 void boardPrinterSetup(){
  printToBoardUnitTests();
+}
+
+void printScrollMessage(String messageToPrint, RgbColor colorToPrint){
+if (messageToPrint.length() == 0){
+  return;
+}
+
+
+  
 }
 
 void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint){
