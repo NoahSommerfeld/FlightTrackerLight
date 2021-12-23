@@ -35,7 +35,9 @@ void setup() {
  // set board; resets all the neopixels to an off state 
     strip.Begin();
     strip.Show();
-
+    
+    boardPrinterSetup();
+/*
 //set up wifi 
     Serial.print("Connecting to wifi");
    // WiFi.disconnect();
@@ -86,17 +88,20 @@ void setup() {
   config.limit.msg_size = 512;
   config.limit.attachment_size = 1024 * 1024 * 5;
 
-  /* Connect to server with the session and config */
+  // Connect to server with the session and config 
     if (!imap.connect(&session, &config))
         return;
 
   //  printAllMailboxesInfo(imap);
  
-    /* Open or select the mailbox folder to read or search the message */
+   //Open or select the mailbox folder to read or search the message
     if (!imap.selectFolder("Inbox/FlightAware"))
         return;
      printSelectedMailboxInfo(imap.selectedFolder());
+     */
 }
+
+
 
 void loop() {
   // Start of loop indicator
@@ -135,6 +140,7 @@ void imapCallback(IMAP_Status status)
        IMAP_MSG_Item msg = msgList.msgItems[0];
        ESP_MAIL_PRINTF("Subject: %s\n", msg.subject);
        String alertText = msg.subject;
+       alertText.toUpperCase();
        printToBoard(alertText);
        //printMessages(msgList.msgItems, imap.headerOnly());
        /* Clear all stored data in IMAPSession object */
@@ -144,7 +150,7 @@ void imapCallback(IMAP_Status status)
 }
 
 void printToBoard(String alertText){
-
+  Serial.println("Printing: '"+alertText+"'");
   if(alertText.indexOf("departed") != -1){
      //do stuff
   }
