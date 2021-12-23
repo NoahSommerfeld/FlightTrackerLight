@@ -133,13 +133,31 @@ void imapCallback(IMAP_Status status)
        /* Get the message list from the message list data */
        IMAP_MSG_List msgList = imap.data();
        IMAP_MSG_Item msg = msgList.msgItems[0];
-        ESP_MAIL_PRINTF("Subject: %s\n", msg.subject);
+       ESP_MAIL_PRINTF("Subject: %s\n", msg.subject);
+       String alertText = msg.subject;
+       printToBoard(alertText);
        //printMessages(msgList.msgItems, imap.headerOnly());
        /* Clear all stored data in IMAPSession object */
-      Serial.println("success");
        imap.empty();
     }
     
+}
+
+void printToBoard(String alertText){
+
+  if(alertText.indexOf("departed") != -1){
+     //do stuff
+  }
+  else if(alertText.indexOf("arrived") != -1){
+    //do stuff
+  }
+  else if(alertText.indexOf("filed") != -1 || alertText.indexOf("changed") != -1){
+    //do stuff
+  }
+  else if(alertText.indexOf("cancelled") != -1){
+    //do stuff
+  }
+
 }
 
 void printSelectedMailboxInfo(SelectedFolderInfo sFolder)
