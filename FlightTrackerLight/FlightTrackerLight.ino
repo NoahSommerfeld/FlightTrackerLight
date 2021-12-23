@@ -10,7 +10,6 @@
 const char *ssid     = CONFIG_WIFI_SSID; //pulled from Config file - update to your implementation
 const char *password = CONFIG_WIFI_PASSWORD;
 
-
 //Board values
 const uint16_t PixelCount = 46; // the number of pixeles in the strip
 NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount);
@@ -19,17 +18,12 @@ NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount);
 IMAPSession imap; // The IMAP Session object used for Email reading 
 IMAP_Config config;
 
-
-
 //*************** FUNCTION DEFINITIONS ***************
 void imapCallback(IMAP_Status status); // Callback function to get the Email reading status /
 void printSelectedMailboxInfo(SelectedFolderInfo sFolder);
 void printPollingStatus(IMAPSession &imap);
 
-
 void setup() {
-
-
 //set up serial connection
  Serial.begin(115200);
     while (!Serial); // wait for serial attach
@@ -38,18 +32,15 @@ void setup() {
     Serial.println("Initializing...");
     Serial.flush();
 
-
  // set board; resets all the neopixels to an off state 
     strip.Begin();
     strip.Show();
 
-    
 //set up wifi 
     Serial.print("Connecting to wifi");
    // WiFi.disconnect();
    // WiFi.mode(WIFI_STA);
     WiFi.begin(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
-  //  updateBoard(RgbColor(0,0,0));
     while ( WiFi.status() != WL_CONNECTED ) { 
       strip.SetPixelColor(5,RgbColor(10,10,10)); //indicator LED to confirm power and Wifi connection
       strip.Show();
@@ -62,32 +53,21 @@ void setup() {
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
-  //  updateBoard(RgbColor(0,0,0));
 
   //set up the imap values
   imap.debug(1); //turn on debug over serial 
   imap.callback(imapCallback); //Set the callback function to get the reading results
 
-
-
   //set up imap session data 
   ESP_Mail_Session session;
 
-  /*
-  session.server.host_name = IMAP_HOST.c_str();
-  session.server.port = IMAP_PORT;
-  session.login.email = IMAP_EMAIL.c_str();
-  session.login.password = IMAP_PASSWORD.c_str(); */
-  
   session.server.host_name = CONFIG_IMAP_HOST;
   session.server.port = CONFIG_IMAP_PORT;
   session.login.email = CONFIG_EMAIL_ADRESS;
   session.login.password = CONFIG_EMAIL_PASSWORD;
 
-
   //set up the config file. See the examples from the library for details
- // IMAP_Config config;
-  //config.fetch.set_seen = true;
+  config.fetch.set_seen = true;
   config.search.criteria = "";
   config.search.unseen_msg = true; //search unread emails too
   config.storage.saved_path = "/email_data";
@@ -106,20 +86,16 @@ void setup() {
   config.limit.msg_size = 512;
   config.limit.attachment_size = 1024 * 1024 * 5;
 
-  Serial.println("NOAH - config values set");
   /* Connect to server with the session and config */
     if (!imap.connect(&session, &config))
         return;
- Serial.println("connected");
 
-    printAllMailboxesInfo(imap);
+  //  printAllMailboxesInfo(imap);
  
     /* Open or select the mailbox folder to read or search the message */
     if (!imap.selectFolder("Inbox/FlightAware"))
         return;
-         Serial.println("found folder");
      printSelectedMailboxInfo(imap.selectedFolder());
-  //imap.empty();
 }
 
 void loop() {
@@ -131,7 +107,6 @@ void loop() {
       strip.Show();
       delay (250);
 
-
   //Listen for mailbox changes
     if (!imap.listen())
         return;
@@ -141,7 +116,6 @@ void loop() {
         printPollingStatus(imap);
 
     //To stop listen, use imap.stopListen(); and to listen again, call imap.listen()
-      
 }
 
 
@@ -165,8 +139,6 @@ void imapCallback(IMAP_Status status)
       Serial.println("success");
        imap.empty();
     }
-    
-
     
 }
 
