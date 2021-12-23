@@ -1,6 +1,7 @@
 #include "Config.h"
 #include <NeoPixelBus.h>
 #include <NeoPixelAnimator.h>
+
 #include <ESP8266WiFi.h>
 //#include <WiFi.h>
 #include <ESP_Mail_Client.h>
@@ -18,10 +19,19 @@ NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount);
 IMAPSession imap; // The IMAP Session object used for Email reading 
 IMAP_Config config;
 
+//********* FUNCTION DEFINITIONS FROM OTHER FILES ********
+//boardPrinter function definitions
+void printToBoardUnitTests();
+void boardPrinterSetup();
+void wipeboard();
+
 //*************** FUNCTION DEFINITIONS ***************
 void imapCallback(IMAP_Status status); // Callback function to get the Email reading status /
 void printSelectedMailboxInfo(SelectedFolderInfo sFolder);
 void printPollingStatus(IMAPSession &imap);
+void messageParsingUnitTests();
+void alertHandleUnitTest(); 
+
 
 void setup() {
 //set up serial connection
@@ -141,7 +151,7 @@ void imapCallback(IMAP_Status status)
        ESP_MAIL_PRINTF("Subject: %s\n", msg.subject);
        String alertText = msg.subject;
        alertText.toUpperCase();
-       printToBoard(alertText);
+       handleAlert(alertText);
        //printMessages(msgList.msgItems, imap.headerOnly());
        /* Clear all stored data in IMAPSession object */
        imap.empty();
@@ -149,7 +159,7 @@ void imapCallback(IMAP_Status status)
     
 }
 
-void printToBoard(String alertText){
+void handleAlert(String alertText){
   Serial.println("Printing: '"+alertText+"'");
   if(alertText.indexOf("departed") != -1){
      //do stuff
@@ -223,4 +233,31 @@ void printPollingStatus(IMAPSession &imap)
         ESP_MAIL_PRINTF("Message %d, has been removed\n\n", (int)sFolder.pollingStatus().messageNum);
     else if (sFolder.pollingStatus().type == imap_polling_status_type_fetch_message)
         ESP_MAIL_PRINTF("Message %d, has been fetched with the argument %s\n\n", (int)sFolder.pollingStatus().messageNum, sFolder.pollingStatus().argument.c_str());
+}
+
+void alertHandleUnitTest(){
+    String testString = "FLE223 has departed YYZ for YVR";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
+    testString = "C-GYNO departed YTZ at 08:05PM EST";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
+    testString = "WJA705 flight to YVR has been cancelled";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
+    testString = "ACA131 flight information has changed";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
+    testString = "POE269 arrived at YOW from YTZ";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
 }
