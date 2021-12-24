@@ -23,7 +23,10 @@ IMAP_Config config;
 //boardPrinter function definitions
 void printToBoardUnitTests();
 void boardPrinterSetup();
-void wipeboard();
+void printFourCornerDots(boolean doDelay, RgbColor colorToPrint);
+void printScrollMessage(String messageToPrint, RgbColor colorToPrint, boolean printFourCorners, RgbColor dotColors);
+void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint);
+void wipeBoard();
 
 //*************** FUNCTION DEFINITIONS ***************
 void imapCallback(IMAP_Status status); // Callback function to get the Email reading status /
@@ -189,6 +192,13 @@ void handleAlert(String alertText){
      //assume characters after "departed" are airport code
      printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
 
+     //clean up well
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     wipeBoard();
+     delay(500);
+
   }
   else if(alertText.indexOf("ARRIVED") != -1){
      dotColor = RgbColor(5,40,5);//green
@@ -214,7 +224,13 @@ void handleAlert(String alertText){
      
      //assume characters after "arrived at" are airport code
      printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
-    
+
+     //clean up well
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     wipeBoard();
+     delay(500);
   }
   else if(alertText.indexOf("FILED") != -1 || alertText.indexOf("CHANGED") != -1){
     dotColor = RgbColor(25,25,1);//yellow
@@ -229,7 +245,12 @@ void handleAlert(String alertText){
      
      printScrollMessage("CHANGE", dotColor, true, dotColor); 
 
-  
+     //clean up well
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     wipeBoard();
+     delay(500);  
   }
   else if(alertText.indexOf("CANCELLED") != -1){
      dotColor = RgbColor(40,5,5);//red
@@ -243,7 +264,13 @@ void handleAlert(String alertText){
      delay(750);
      
      printScrollMessage("CANCELLED", dotColor, true, dotColor); 
-    
+
+     //clean up well
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     wipeBoard();
+     delay(500);
   }
 
 }
