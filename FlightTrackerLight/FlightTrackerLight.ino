@@ -201,7 +201,7 @@ void handleAlert(String alertText){
 
   }
   else if(alertText.indexOf("ARRIVED") != -1){
-     dotColor = RgbColor(5,40,5);//green
+     dotColor = RgbColor(3,30,3);//green
      
      //play loading symbol
      printFourCornerDots(true, dotColor);
@@ -253,7 +253,7 @@ void handleAlert(String alertText){
      delay(500);  
   }
   else if(alertText.indexOf("CANCELLED") != -1){
-     dotColor = RgbColor(40,5,5);//red
+     dotColor = RgbColor(30,1,1);//red
     //play loading symbol
      printFourCornerDots(true, dotColor);
      
