@@ -168,13 +168,14 @@ void handleAlert(String alertText){
   Serial.println("Printing: '"+alertText+"'");
   RgbColor dotColor;
   if(alertText.indexOf("DEPARTED") != -1){
-     dotColor = RgbColor(2,2,30);//blue
+     dotColor = RgbColor(2,2,25);//blue
      
      //play loading symbol
      printFourCornerDots(true, dotColor);
      
      //assume up to first space is flight name/number
-     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     String flightCode = alertText.substring(0,alertText.indexOf(" "));
+     printScrollMessage(flightCode, getAirlineColor(flightCode), true, dotColor); 
      printFourCornerDots(false,dotColor);
      strip.Show();
      delay(750);
@@ -201,13 +202,14 @@ void handleAlert(String alertText){
 
   }
   else if(alertText.indexOf("ARRIVED") != -1){
-     dotColor = RgbColor(3,30,3);//green
+     dotColor = RgbColor(5,25,3);//green
      
      //play loading symbol
      printFourCornerDots(true, dotColor);
      
      //assume up to first space is flight name/number
-     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     String flightCode = alertText.substring(0,alertText.indexOf(" "));
+     printScrollMessage(flightCode, getAirlineColor(flightCode), true, dotColor); 
      printFourCornerDots(false,dotColor);
      strip.Show();
      delay(750);
@@ -238,7 +240,8 @@ void handleAlert(String alertText){
      printFourCornerDots(true, dotColor);
      
      //assume up to first space is flight name/number
-     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     String flightCode = alertText.substring(0,alertText.indexOf(" "));
+     printScrollMessage(flightCode, getAirlineColor(flightCode), true, dotColor); 
      printFourCornerDots(false,dotColor);
      strip.Show();
      delay(750);
@@ -258,7 +261,8 @@ void handleAlert(String alertText){
      printFourCornerDots(true, dotColor);
      
      //assume up to first space is flight name/number
-     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     String flightCode = alertText.substring(0,alertText.indexOf(" "));
+     printScrollMessage(flightCode, getAirlineColor(flightCode), true, dotColor); 
      printFourCornerDots(false,dotColor);
      strip.Show();
      delay(750);
@@ -359,4 +363,22 @@ void alertHandleUnitTest(){
     testString.toUpperCase();
     handleAlert(testString);
     delay(1000);
+}
+
+RgbColor getAirlineColor(String flightCode){
+  if(flightCode.startsWith("ACA")){
+    return RgbColor(25,1,1); //air canada, deep red
+  }
+  else if(flightCode.startsWith("WJA")){
+    return RgbColor (4,20,20); //westject, turqoise
+  }
+  else if(flightCode.startsWith("POE")){
+    return RgbColor (1,7,31); //porter, deep blue
+  }
+  else if(flightCode.startsWith("FLE")){
+    return RgbColor(31,3,26); //flair - purple
+  }
+  else{
+    return RgbColor (15,15,15);//other - white
+  }
 }
