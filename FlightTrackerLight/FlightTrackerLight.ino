@@ -165,7 +165,7 @@ void handleAlert(String alertText){
   Serial.println("Printing: '"+alertText+"'");
   RgbColor dotColor;
   if(alertText.indexOf("DEPARTED") != -1){
-     dotColor = RgbColor(5,5,40);//blue
+     dotColor = RgbColor(2,2,30);//blue
      
      //play loading symbol
      printFourCornerDots(true, dotColor);
@@ -173,6 +173,7 @@ void handleAlert(String alertText){
      //assume up to first space is flight name/number
      printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
      printFourCornerDots(false,dotColor);
+     strip.Show();
      delay(750);
      
      printTwoCharacters('D','P',dotColor); //departed
@@ -181,7 +182,7 @@ void handleAlert(String alertText){
      delay(1000);
      wipeBoard();
      printFourCornerDots(false,dotColor);
-     strip.show();
+     strip.Show();
      delay(750);
      int pivot = alertText.indexOf("DEPARTED ")+9;
      
@@ -190,15 +191,59 @@ void handleAlert(String alertText){
 
   }
   else if(alertText.indexOf("ARRIVED") != -1){
-    dotColor = RgbColor(5,40,5);//green
+     dotColor = RgbColor(5,40,5);//green
+     
+     //play loading symbol
+     printFourCornerDots(true, dotColor);
+     
+     //assume up to first space is flight name/number
+     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     
+     printTwoCharacters('A','R',dotColor); //arrived
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(1000);
+     wipeBoard();
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     int pivot = alertText.indexOf("ARRIVED AT ")+11;
+     
+     //assume characters after "arrived at" are airport code
+     printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
     
   }
   else if(alertText.indexOf("FILED") != -1 || alertText.indexOf("CHANGED") != -1){
-    dotColor = RgbColor(5,25,25);//yellow
+    dotColor = RgbColor(25,25,1);//yellow
+     //play loading symbol
+     printFourCornerDots(true, dotColor);
+     
+     //assume up to first space is flight name/number
+     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     
+     printScrollMessage("CHANGE", dotColor, true, dotColor); 
+
   
   }
   else if(alertText.indexOf("CANCELLED") != -1){
-    dotColor = RgbColor(40,5,5);//red
+     dotColor = RgbColor(40,5,5);//red
+    //play loading symbol
+     printFourCornerDots(true, dotColor);
+     
+     //assume up to first space is flight name/number
+     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(750);
+     
+     printScrollMessage("CANCELLED", dotColor, true, dotColor); 
+    
   }
 
 }
