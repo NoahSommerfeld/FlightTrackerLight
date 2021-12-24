@@ -122,6 +122,7 @@ void loop() {
       strip.Show();
       delay (250);
   boardPrinterSetup();
+  alertHandleUnitTest();
   /*
   //Listen for mailbox changes
     if (!imap.listen())
@@ -162,17 +163,42 @@ void imapCallback(IMAP_Status status)
 
 void handleAlert(String alertText){
   Serial.println("Printing: '"+alertText+"'");
-  if(alertText.indexOf("departed") != -1){
-     //do stuff
+  RgbColor dotColor;
+  if(alertText.indexOf("DEPARTED") != -1){
+     dotColor = RgbColor(5,5,40);//blue
+     
+     //play loading symbol
+     printFourCornerDots(true, dotColor);
+     
+     //assume up to first space is flight name/number
+     printScrollMessage(alertText.substring(0,alertText.indexOf(" ")), dotColor, true, dotColor); 
+     printFourCornerDots(false,dotColor);
+     delay(750);
+     
+     printTwoCharacters('D','P',dotColor); //departed
+     printFourCornerDots(false,dotColor);
+     strip.Show();
+     delay(1000);
+     wipeBoard();
+     printFourCornerDots(false,dotColor);
+     strip.show();
+     delay(750);
+     int pivot = alertText.indexOf("DEPARTED ")+9;
+     
+     //assume characters after "departed" are airport code
+     printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
+
   }
-  else if(alertText.indexOf("arrived") != -1){
-    //do stuff
+  else if(alertText.indexOf("ARRIVED") != -1){
+    dotColor = RgbColor(5,40,5);//green
+    
   }
-  else if(alertText.indexOf("filed") != -1 || alertText.indexOf("changed") != -1){
-    //do stuff
+  else if(alertText.indexOf("FILED") != -1 || alertText.indexOf("CHANGED") != -1){
+    dotColor = RgbColor(5,25,25);//yellow
+  
   }
-  else if(alertText.indexOf("cancelled") != -1){
-    //do stuff
+  else if(alertText.indexOf("CANCELLED") != -1){
+    dotColor = RgbColor(40,5,5);//red
   }
 
 }

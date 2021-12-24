@@ -1,4 +1,6 @@
 const int alphabetSize = 38;
+const int scrollspeed = 900; //speed between scrolling letters, in milliseconds
+
 
 typedef struct { 
   char letter;
@@ -22,19 +24,19 @@ const letterLEDmapping LEDAlphabet[] {
     {'J', 6, {34,28,22,16,9,14}},
     {'K', 9, {32,26,20,14,8,34,27,15,10}},
     {'L', 7, {32,26,20,14,8,9,10}},
-    {'M', 9, {8,14,20,26,21,28,22,16,10}},
+    {'M', 12, {8,14,20,26,32,27,21,34,28,22,16,10}},
     {'N', 11, {32,26,20,14,8,34,28,22,16,10,21}},
     {'O', 8, {33,26,20,14,9,16,22,28}},
     {'P', 8, {8,14,20,26,32,33,28,21}},
     {'Q', 9, {33,26,20,15,22,28,21,16,10}},
-    {'R', 10, {32,26,20,14,8,33,28,21,15,10}},
+    {'R', 10, {32,26,20,14,8,33,28,21,16,10}},
     {'S', 9, {34,33,32,26,21,16,9,8,10}},
     {'T', 7, {32,33,34,27,21,15,9}},
     {'U', 9, {26,20,14,8,9,10,16,22,28}},
     {'V', 7, {26,20,14,9,16,22,28}},
-    {'W', 9, {26,20,14,8,15,10,16,22,28}},
+    {'W', 12, {32,26,20,14,8,15,21,10,16,22,28,34}},
     {'X', 9, {32,26,21,14,8,10,16,28,34}},
-    {'Y', 8, {32,26,20,15,9,22,28,34}},
+    {'Y', 9, {32,26,20,15,21,9,22,28,34}},
     {'Z', 9, {32,33,34,28,21,14,8,9,10}},
     {'1', 8, {26,33,27,21,15,9,8,10}},
     {'2', 8, {26,33,28,22,15,8,9,10}},
@@ -49,7 +51,7 @@ const letterLEDmapping LEDAlphabet[] {
     {'-', 3, {20,21,22}},
 };
     
-void wipeboard(){
+void wipeBoard(){
   for (int i = 0; i< PixelCount; i++){
     strip.SetPixelColor(i,RgbColor(0,0,0)); 
   }
@@ -57,16 +59,53 @@ void wipeboard(){
 }
 
 void boardPrinterSetup(){
- printToBoardUnitTests();
+ //printToBoardUnitTests(); //unit tests
 }
 
-void printScrollMessage(String messageToPrint, RgbColor colorToPrint){
-if (messageToPrint.length() == 0){
-  return;
+void printFourCornerDots(boolean doDelay, RgbColor colorToPrint){
+  int printDelay = 0;
+  if(doDelay){
+    printDelay = scrollspeed;
+  }
+  strip.SetPixelColor(0,colorToPrint); 
+  strip.Show();
+  delay(printDelay);
+  strip.SetPixelColor(42,colorToPrint);
+  strip.Show(); 
+  delay(printDelay);
+  strip.SetPixelColor(45,colorToPrint); 
+  strip.Show();
+  delay(printDelay);
+  strip.SetPixelColor(3,colorToPrint); 
+  strip.Show();
+  delay(printDelay);
 }
 
 
+void printScrollMessage(String messageToPrint, RgbColor colorToPrint, boolean printFourCorners, RgbColor dotColors){
+  if (messageToPrint.length() < 2){
+    return; //shouldn't happen...
+  }
   
+  wipeBoard();
+  printTwoCharacters(0,messageToPrint.charAt(0), colorToPrint);
+  if(printFourCorners){printFourCornerDots(false, dotColors);}
+  strip.Show();
+  delay (scrollspeed); 
+
+  for (int i=0; i<messageToPrint.length()-1; i++){
+    wipeBoard();
+    printTwoCharacters(messageToPrint.charAt(i),messageToPrint.charAt(i+1), colorToPrint);
+    if(printFourCorners){printFourCornerDots(false, dotColors);}
+    strip.Show();
+    delay (scrollspeed); 
+  }
+    wipeBoard();
+    printTwoCharacters(messageToPrint.charAt(messageToPrint.length()-1),0, colorToPrint);
+    if(printFourCorners){printFourCornerDots(false, dotColors);}
+    strip.Show();
+    delay (scrollspeed); 
+    wipeBoard();
 }
 
 void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint){
@@ -108,25 +147,27 @@ void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint){
 }
 
 void printToBoardUnitTests(){
-   printAlphabet();
+  // printAlphabet();
+  printFourCornerDots(true, RgbColor(5,5,40));
+  printScrollMessage("MERRY-CHRISTMAS-NOAH",RgbColor(40,5,5),true, RgbColor(5,5,40));
 }
 
 void printAlphabet(){
   RgbColor printColor = RgbColor(70,3,3);
-  wipeboard();
+  wipeBoard();
   printTwoCharacters(0, LEDAlphabet[0].letter,printColor);
   strip.Show();
   delay (3000);
   
   for (int i=0; i<alphabetSize-1;i++){
-    wipeboard();
+    wipeBoard();
     printTwoCharacters(LEDAlphabet[i].letter, LEDAlphabet[i+1].letter,printColor);
     strip.Show();
     delay(3000);
   }
-  wipeboard();
+  wipeBoard();
   printTwoCharacters(LEDAlphabet[alphabetSize-1].letter, 0,printColor);
   strip.Show();
   delay (3000);
-  wipeboard();
+  wipeBoard();
 }
