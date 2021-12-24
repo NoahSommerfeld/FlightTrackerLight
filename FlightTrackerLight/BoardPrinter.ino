@@ -57,10 +57,6 @@ void wipeBoard(){
   strip.Show();
 }
 
-void boardPrinterSetup(){
- //printToBoardUnitTests(); //unit tests
-}
-
 void printFourCornerDots(boolean doDelay, RgbColor colorToPrint){
   int printDelay = 0;
   if(doDelay){

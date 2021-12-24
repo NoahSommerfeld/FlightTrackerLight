@@ -50,18 +50,18 @@ void setup() {
     strip.Show();
     
     
-/*
+
 //set up wifi 
     Serial.print("Connecting to wifi");
    // WiFi.disconnect();
    // WiFi.mode(WIFI_STA);
     WiFi.begin(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
     while ( WiFi.status() != WL_CONNECTED ) { 
-      strip.SetPixelColor(5,RgbColor(10,10,10)); //indicator LED to confirm power and Wifi connection
+      printTwoCharacters('I',0,RgbColor(10,10,10)); //indicator LEDs to confirm power and Wifi connection
       strip.Show();
       delay ( 250 );
       Serial.print ( "." );
-      strip.SetPixelColor(5,RgbColor(0,0,0));
+      wipeBoard();
       strip.Show();
       delay (250);
     }
@@ -82,7 +82,7 @@ void setup() {
   session.login.password = CONFIG_EMAIL_PASSWORD;
 
   //set up the config file. See the examples from the library for details
-  config.fetch.set_seen = true;
+ /* //config.fetch.set_seen = true;
   config.search.criteria = "";
   config.search.unseen_msg = true; //search unread emails too
   config.storage.saved_path = "/email_data";
@@ -99,7 +99,7 @@ void setup() {
   config.enable.download_status = true; //report download status via serial port
   config.limit.search = 5;
   config.limit.msg_size = 512;
-  config.limit.attachment_size = 1024 * 1024 * 5;
+  config.limit.attachment_size = 1024 * 1024 * 5;*/
 
   // Connect to server with the session and config 
     if (!imap.connect(&session, &config))
@@ -111,25 +111,21 @@ void setup() {
     if (!imap.selectFolder("Inbox/FlightAware"))
         return;
      printSelectedMailboxInfo(imap.selectedFolder());
-     */
+     
 }
 
 
 
 void loop() {
-  // Start of loop indicator
-      strip.SetPixelColor(10,RgbColor(10,10,60)); 
-      strip.Show();
-      delay ( 250 );
-      strip.SetPixelColor(10,RgbColor(0,0,0));
-      strip.Show();
-      delay (250);
-  boardPrinterSetup();
-  alertHandleUnitTest();
-  /*
+  //alertHandleUnitTest(); //run unit tests
+  
   //Listen for mailbox changes
-    if (!imap.listen())
-        return;
+    if (!imap.listen()){
+      printTwoCharacters('?','?',RgbColor(25,5,1)); //print error on screen
+      strip.Show();
+      return;
+    }
+    Serial.println(".");
 
     //Check the changes
     if (imap.folderChanged())
@@ -144,7 +140,7 @@ void loop() {
 void imapCallback(IMAP_Status status)
 {
    
-   Serial.println("reading email");
+   //Serial.println("reading email");
    /* Print the current status */
    Serial.println(status.info());
    if (status.success())
@@ -156,10 +152,11 @@ void imapCallback(IMAP_Status status)
        ESP_MAIL_PRINTF("Subject: %s\n", msg.subject);
        String alertText = msg.subject;
        alertText.toUpperCase();
-       handleAlert(alertText);
+       imap.empty();
+      // handleAlert(alertText);
        //printMessages(msgList.msgItems, imap.headerOnly());
        /* Clear all stored data in IMAPSession object */
-       imap.empty();
+       
     }
     
 }
