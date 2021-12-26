@@ -20,6 +20,8 @@ NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(PixelCount);
 IMAPSession imap; // The IMAP Session object used for Email reading 
 IMAP_Config config;
 
+long lastConnectTime; //used to make sure the imap email listener connection doesn't timeout. 
+
 //********* FUNCTION DEFINITIONS FROM OTHER FILES ********
 //boardPrinter function definitions
 void printToBoardUnitTests();
@@ -117,6 +119,8 @@ void setup() {
     if (!imap.selectFolder("Inbox/FlightAware"))
         return;
      printSelectedMailboxInfo(imap.selectedFolder());
+
+    lastConnectTime = millis();
      
 }
 
@@ -129,6 +133,14 @@ void loop() {
   if(millis() > (24*60*60*1000)){
     Serial.println("24 hours elapsed - rebooting");
     reboot(); 
+  }
+
+  //refresh the connection to mail every 10 min to make sure it isn't closed by server
+  if((millis() - lastConnectTime)>(3*60*1000)){
+    imap.stopListen();
+    delay(250);
+    imap.listen();
+    lastConnectTime = millis();
   }
   
   //Listen for mailbox changes
