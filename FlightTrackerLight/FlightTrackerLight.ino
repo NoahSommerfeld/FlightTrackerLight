@@ -147,7 +147,8 @@ void loop() {
     if (!imap.listen()){
       printTwoCharacters('?','?',RgbColor(25,5,1)); //print error on screen
       strip.Show();
-      return;
+      delay(2000);
+      reboot();
     }
    // Serial.println(".");
 
