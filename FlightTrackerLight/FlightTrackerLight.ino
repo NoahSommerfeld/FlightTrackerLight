@@ -164,7 +164,7 @@ void imapCallback(IMAP_Status status)
 }
 
 void handleAlert(String alertText){
-  Serial.println("Printing: '"+alertText+"'");
+  Serial.println("processing alert text: '"+alertText+"'");
   RgbColor dotColor;
   if(alertText.indexOf("DEPARTED") != -1){
      dotColor = RgbColor(2,2,25);//blue
