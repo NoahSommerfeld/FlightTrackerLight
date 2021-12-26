@@ -125,13 +125,14 @@ void loop() {
       strip.Show();
       return;
     }
-    Serial.println(".");
+   // Serial.println(".");
 
     //Check the changes
     if (imap.folderChanged())
         printPollingStatus(imap);
 
     //To stop listen, use imap.stopListen(); and to listen again, call imap.listen()*/
+    delay(50);
 }
 
 
@@ -153,7 +154,8 @@ void imapCallback(IMAP_Status status)
        String alertText = msg.subject;
        alertText.toUpperCase();
        imap.empty();
-      // handleAlert(alertText);
+       imap.listen();
+       handleAlert(alertText);
        //printMessages(msgList.msgItems, imap.headerOnly());
        /* Clear all stored data in IMAPSession object */
        
@@ -378,4 +380,10 @@ RgbColor getAirlineColor(String flightCode){
   else{
     return RgbColor (15,15,15);//other - white
   }
+}
+
+//workaround for a bug where subsequent emails aren't noticed
+void resetIMAP(){
+  if (imap.folderChanged())
+        imap.empty(); 
 }

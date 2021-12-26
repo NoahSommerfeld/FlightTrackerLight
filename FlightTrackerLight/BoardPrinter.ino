@@ -104,6 +104,7 @@ void printScrollMessage(String messageToPrint, RgbColor colorToPrint, boolean pr
 }
 
 void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint){
+  Serial.println("printing: '"+ firstChar + secondChar);
   //first letter
   if(firstChar != 0){ //note default char value is 0, which is different from '0'. 
     letterLEDmapping toPrint1;
