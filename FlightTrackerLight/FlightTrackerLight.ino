@@ -2,6 +2,7 @@
 #include <NeoPixelBus.h>
 #include <NeoPixelAnimator.h>
 
+
 #include <ESP8266WiFi.h>
 //#include <WiFi.h>
 #include <ESP_Mail_Client.h>
@@ -34,10 +35,13 @@ void printSelectedMailboxInfo(SelectedFolderInfo sFolder);
 void printPollingStatus(IMAPSession &imap);
 void messageParsingUnitTests();
 void alertHandleUnitTest(); 
+void reboot();
+void hw_wdt_disable();
 
 
 void setup() {
-//set up serial connection
+
+  //set up serial connection
  Serial.begin(115200);
     while (!Serial); // wait for serial attach
 
@@ -45,11 +49,13 @@ void setup() {
     Serial.println("Initializing...");
     Serial.flush();
 
+    hw_wdt_disable(); //turn off watchdog (sometimes used for reboot, so may be left on)
+
  // set board; resets all the neopixels to an off state 
     strip.Begin();
     strip.Show();
     
-    
+  
 
 //set up wifi 
     Serial.print("Connecting to wifi");
@@ -118,6 +124,12 @@ void setup() {
 
 void loop() {
   //alertHandleUnitTest(); //run unit tests
+
+  //check for reboot
+  if(millis() > (3*60*1000)){
+    Serial.println("24 hours elapsed - rebooting");
+    reboot(); 
+  }
   
   //Listen for mailbox changes
     if (!imap.listen()){
@@ -387,3 +399,20 @@ void resetIMAP(){
   if (imap.folderChanged())
         imap.empty(); 
 }
+
+
+void reboot() {
+  wdt_disable();
+  wdt_enable(WDTO_15MS);
+  while (1) {} //force an infinite loop to tigger watchdog
+}
+
+
+void hw_wdt_disable(){
+  *((volatile uint32_t*) 0x60000900) &= ~(1); // Hardware WDT OFF
+}
+
+/*
+void hw_wdt_enable(){
+  *((volatile uint32_t*) 0x60000900) |= 1; // Hardware WDT ON
+}*/

@@ -1,3 +1,4 @@
+
 const int alphabetSize = 38;
 const int scrollspeed = 900; //speed between scrolling letters, in milliseconds
 
@@ -104,7 +105,7 @@ void printScrollMessage(String messageToPrint, RgbColor colorToPrint, boolean pr
 }
 
 void printTwoCharacters(char firstChar, char secondChar, RgbColor colorToPrint){
-  Serial.println("printing: '"+ firstChar + secondChar);
+  Serial.println("printing: '"+ String(firstChar) + String(secondChar));
   //first letter
   if(firstChar != 0){ //note default char value is 0, which is different from '0'. 
     letterLEDmapping toPrint1;
