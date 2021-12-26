@@ -136,7 +136,7 @@ void loop() {
   }
 
   //refresh the connection to mail every 10 min to make sure it isn't closed by server
-  if((millis() - lastConnectTime)>(3*60*1000)){
+  if((millis() - lastConnectTime)>(10*60*1000)){
     imap.stopListen();
     delay(250);
     imap.listen();
