@@ -126,7 +126,7 @@ void loop() {
   //alertHandleUnitTest(); //run unit tests
 
   //check for reboot
-  if(millis() > (3*60*1000)){
+  if(millis() > (24*60*60*1000)){
     Serial.println("24 hours elapsed - rebooting");
     reboot(); 
   }
