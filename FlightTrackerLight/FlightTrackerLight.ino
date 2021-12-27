@@ -402,10 +402,16 @@ void alertHandleUnitTest(){
     testString.toUpperCase();
     handleAlert(testString);
     delay(1000);
+
+    testString = "JZA8413 arrived at YVR from YYF";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
 }
 
 RgbColor getAirlineColor(String flightCode){
-  if(flightCode.startsWith("ACA")){
+  if(flightCode.startsWith("ACA") || flightCode.startsWith("JZA")){
     return RgbColor(25,1,1); //air canada, deep red
   }
   else if(flightCode.startsWith("WJA")){
