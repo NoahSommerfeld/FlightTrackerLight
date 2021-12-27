@@ -301,6 +301,15 @@ void handleAlert(String alertText){
      wipeBoard();
      delay(500);
   }
+  else{ 
+    /*unknown message - shouldn't get here 
+    (set a rule in the email inbox to only move emails from alert.flightaware to subfolder) */
+     dotColor = RgbColor(15,15,15);//white
+    //play loading symbol
+     printFourCornerDots(true, dotColor);
+     printTwoCharacters('?','?',RgbColor(30,1,1); //??
+     delay(1500);
+  }
 
 }
 
@@ -385,6 +394,11 @@ void alertHandleUnitTest(){
     delay(1000);
 
     testString = "POE269 arrived at YOW from YTZ";
+    testString.toUpperCase();
+    handleAlert(testString);
+    delay(1000);
+
+    testString = "thisisnotarealalert";
     testString.toUpperCase();
     handleAlert(testString);
     delay(1000);
