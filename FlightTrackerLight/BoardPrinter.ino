@@ -77,7 +77,7 @@ void printFourCornerDots(boolean doDelay, RgbColor colorToPrint){
   delay(printDelay);
 }
 
-
+//wipes board at end
 void printScrollMessage(String messageToPrint, RgbColor colorToPrint, boolean printFourCorners, RgbColor dotColors){
   if (messageToPrint.length() < 2){
     return; //shouldn't happen...

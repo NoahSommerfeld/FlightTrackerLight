@@ -218,6 +218,16 @@ void handleAlert(String alertText){
      //assume characters after "departed" are airport code
      printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
 
+      pivot = alertText.indexOf("FOR ")+4;
+     if(pivot>6){
+       printFourCornerDots(false,dotColor);
+       printTwoCharacters('T','O',dotColor);
+       strip.Show();
+       delay(1000);
+       wipeboard();
+       printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor);
+     }
+
      //clean up well
      printFourCornerDots(false,dotColor);
      strip.Show();
@@ -250,7 +260,17 @@ void handleAlert(String alertText){
      int pivot = alertText.indexOf("ARRIVED AT ")+11;
      
      //assume characters after "arrived at" are airport code
-     printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor); 
+     printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor);
+
+     pivot = alertText.indexOf("FROM ")+5;
+     if(pivot>6){
+       printFourCornerDots(false,dotColor);
+       printTwoCharacters('F','M',dotColor);
+       strip.Show();
+       delay(1000);
+       wipeboard();
+       printScrollMessage(alertText.substring(pivot,alertText.indexOf(" ",pivot)), dotColor, true, dotColor);
+     }
 
      //clean up well
      printFourCornerDots(false,dotColor);
